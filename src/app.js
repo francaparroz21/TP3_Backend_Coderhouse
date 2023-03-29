@@ -12,8 +12,13 @@ const productManager = new ProductManager('./src/files/Products.json')
 
 //Get de todos los productos.
 app.get('/products', async (req, res) => {
-    const products = await productManager.getProducts()
-    res.send(products)
+    const limit = req.query.limit
+    const allProducts = await productManager.getProducts()
+    
+    if (!limit) return res.send(allProducts)
+
+    const productsLimited = allProducts.slice(0,parseInt(limit))
+    res.send(productsLimited)
 })
 
 //Get de un producto en especifico pasado por parametro en el endpoint
